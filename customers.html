@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Management - Bank Management System</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/customers.css">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <header>
+        <nav>
+            <h2>Bank Management</h2>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="customers.html" class="active">Customers</a></li>
+                <li><a href="transactions.html">Transactions</a></li>
+                <li><a href="loans.html">Loans</a></li>
+                <li><button id="logoutBtn">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Customers Section -->
+    <div class="customer-container">
+        <h1>Customer Management</h1>
+
+        <!-- Add Customer Button -->
+        <button class="add-btn" onclick="openModal()">+ Add Customer</button>
+
+        <!-- Customers Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Balance</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="customerList"></tbody>
+        </table>
+    </div>
+
+    <!-- Modal for Adding & Editing Customers -->
+    <div id="customerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Add Customer</h2>
+            <input type="hidden" id="customerId">
+            <input type="text" id="customerName" placeholder="Full Name" required>
+            <input type="email" id="customerEmail" placeholder="Email" required>
+            <input type="tel" id="customerPhone" placeholder="Phone Number" required>
+            <input type="number" id="customerBalance" placeholder="Balance" required>
+            <button onclick="saveCustomer()">Save</button>
+        </div>
+    </div>
+
+    <script src="assets/js/customers.js"></script>
+    <script src="assets/js/logout.js"></script>
+</body>
+</html>

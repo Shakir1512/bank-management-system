@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Bank Management</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <script src="assets/js/dashboard.js" defer></script>
+    <script src="assets/js/auth.js" defer></script>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <header>
+        <nav>
+            <h2>Bank Management</h2>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="customers.html">Customers</a></li>
+                <li><a href="transactions.html">Transactions</a></li>
+                <li><a href="loans.html">Loans</a></li>
+                <li><button id="logoutBtn">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-container">
+        <h1>Welcome, <span id="userEmail"></span></h1>
+        <div class="dashboard-cards">
+            <div class="card">
+                <h3>Total Customers</h3>
+                <p id="totalCustomers">0</p>
+            </div>
+            <div class="card">
+                <h3>Total Transactions</h3>
+                <p id="totalTransactions">0</p>
+            </div>
+            <div class="card">
+                <h3>Total Loans</h3>
+                <p id="totalLoans">0</p>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/dashboard.js"></script>
+    <!-- <script src="assets/js/logout.js"></script> -->
+</body>
+
+</body>
+</html>

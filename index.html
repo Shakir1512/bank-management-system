@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Management System</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <header>
+        <nav>
+            <h2><i class="fa-solid fa-university"></i> Bank Management</h2>
+            <ul class="nav-links">
+                <li><a href="#"><i class="fa-solid fa-house"></i> Home</a></li>
+                <li><a href="register.html"><i class="fa-solid fa-user-plus"></i> Register</a></li>
+                <li><a href="login.html"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+                <li><a href="#"><i class="fa-solid fa-gears"></i> Services</a></li>
+            </ul>
+            <div class="menu-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 id="dynamic-text">Welcome to Your Trusted Bank</h1>
+            <p>Secure & Reliable Banking for Employees & Customers</p>
+            <div class="hero-buttons">
+                <a href="register.html" class="btn"><i class="fa-solid fa-user-plus"></i> Register Now</a>
+                <a href="login.html" class="btn secondary"><i class="fa-solid fa-right-to-bracket"></i> Employee Login</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Bank Management System. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Sticky Navbar
+        window.addEventListener("scroll", function() {
+            document.querySelector("nav").classList.toggle("sticky", window.scrollY > 50);
+        });
+
+        // Mobile Menu Toggle
+        document.querySelector(".menu-toggle").addEventListener("click", function() {
+            document.querySelector(".nav-links").classList.toggle("active");
+        });
+
+        // Dynamic Typewriter Effect (Fixed Shifting Issue)
+        const phrases = ["Welcome to Your Trusted Bank", "Your Financial Security, Our Priority", "Fast, Secure & Reliable Banking"];
+        let i = 0, j = 0, isDeleting = false;
+        function typeEffect() {
+            const textElement = document.getElementById("dynamic-text");
+            const currentPhrase = phrases[i];
+
+            textElement.innerHTML = currentPhrase.substring(0, j);
+
+            if (!isDeleting && j < currentPhrase.length) {
+                j++;
+                setTimeout(typeEffect, 100);
+            } else if (isDeleting && j > 0) {
+                j--;
+                setTimeout(typeEffect, 50);
+            } else {
+                isDeleting = !isDeleting;
+                if (!isDeleting) i = (i + 1) % phrases.length;
+                setTimeout(typeEffect, 2000);
+            }
+        }
+        typeEffect();
+    </script>
+
+</body>
+</html>

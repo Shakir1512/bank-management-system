@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions - Bank Management System</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/transaction.css">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <header>
+        <nav>
+            <h2>Bank Management</h2>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="customers.html">Customers</a></li>
+                <li><a href="transactions.html" class="active">Transactions</a></li>
+                <li><a href="loans.html">Loans</a></li>
+                <li><button id="logoutBtn">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Transactions Section -->
+    <div class="transaction-container">
+        <h1>Manage Transactions</h1>
+
+        <!-- Transaction Form -->
+        <div class="transaction-form">
+            <label for="transactionType">Transaction Type:</label>
+            <select id="transactionType">
+                <option value="deposit">Deposit</option>
+                <option value="withdraw">Withdraw</option>
+                <option value="transfer">Transfer</option>
+            </select>
+
+            <label for="customerSelect">Select Customer:</label>
+            <select id="customerSelect"></select>
+
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" placeholder="Enter amount" required>
+
+            <div id="transferSection" style="display: none;">
+                <label for="recipientSelect">Select Recipient:</label>
+                <select id="recipientSelect"></select>
+            </div>
+
+            <button onclick="processTransaction()">Submit</button>
+        </div>
+
+        <!-- Transactions Table -->
+        <h2>Transaction History</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="transactionList"></tbody>
+        </table>
+    </div>
+
+    <script src="assets/js/transactions.js"></script>
+    <script src="assets/js/logout.js"></script>
+</body>
+</html>

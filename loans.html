@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Management - Bank Management System</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/loans.css">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <header>
+        <nav>
+            <h2>Bank Management</h2>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="customers.html">Customers</a></li>
+                <li><a href="transactions.html">Transactions</a></li>
+                <li><a href="loans.html" class="active">Loans</a></li>
+                <li><button id="logoutBtn">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Loan Management Section -->
+    <div class="loan-container">
+        <h1>Manage Loan Requests</h1>
+
+        <!-- Loan Request Form -->
+        <div class="loan-form">
+            <label for="customerSelect">Select Customer:</label>
+            <select id="customerSelect"></select>
+
+            <label for="loanAmount">Loan Amount:</label>
+            <input type="number" id="loanAmount" placeholder="Enter amount" required>
+
+            <button onclick="requestLoan()">Request Loan</button>
+        </div>
+
+        <!-- Loan Requests Table -->
+        <h2>Loan Requests</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="loanRequestsList"></tbody>
+        </table>
+    </div>
+
+    <script src="assets/js/loans.js"></script>
+    <script src="assets/js/logout.js"></script>
+</body>
+</html>

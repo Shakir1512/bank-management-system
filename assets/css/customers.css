@@ -1,0 +1,83 @@
+.customer-container {
+    text-align: center;
+    margin-top: 80px;
+}
+
+.add-btn {
+    background: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 90%;
+    margin: auto;
+    border-collapse: collapse;
+    background: white;
+    color: black;
+}
+
+table, th, td {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background: #333;
+    color: white;
+}
+
+/* Edit & Delete Buttons */
+.edit-btn, .delete-btn {
+    padding: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.edit-btn {
+    background: #ffc107;
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: white;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    text-align: center;
+    z-index: 1000;
+}
+
+.modal-content input {
+    width: 100%;
+    margin: 10px 0;
+    padding: 8px;
+}
+
+.close {
+    float: right;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    table {
+        width: 100%;
+    }
+}
