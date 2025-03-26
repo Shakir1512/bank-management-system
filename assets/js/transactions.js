@@ -13,16 +13,25 @@ function loadCustomersForTransactions() {
     recipientSelect.innerHTML = "<option value=''>Select Recipient</option>";
 
     customers.forEach((customer, index) => {
-        let option = `<option value="${index}">${customer.name} - ₹${customer.balance}</option>`;
+        if (!customer.accountNumber) {
+            customer.accountNumber = `AC-${1000 + index}`;
+        }
+
+        let option = `<option value="${index}" data-account="${customer.accountNumber}">
+                        ${customer.accountNumber} - ${customer.name} (₹${customer.balance})
+                      </option>`;
+
         customerSelect.innerHTML += option;
         recipientSelect.innerHTML += option;
     });
+
+    localStorage.setItem("customers", JSON.stringify(customers));
 }
 
-// Show/Hide Transfer Section based on selection
+// Show/Hide Transfer Section
 document.getElementById("transactionType").addEventListener("change", function () {
     let transferSection = document.getElementById("transferSection");
-    transferSection.style.display = this.value === "transfer" ? "block" : "none";
+    transferSection.style.display = (this.value === "transfer") ? "block" : "none";
 });
 
 // Process Transactions
@@ -33,73 +42,80 @@ function processTransaction() {
     let customers = JSON.parse(localStorage.getItem("customers")) || [];
 
     if (customerIndex === "" || isNaN(amount) || amount <= 0) {
-        showPopup("Please enter valid details!", "error");
+        alert("Please enter valid details!");
         return;
     }
 
     let customer = customers[customerIndex];
 
     if (type === "deposit") {
-        customer.balance = parseFloat(customer.balance) + amount;
-        showPopup("Deposit successful!", "success");
+        customer.balance += amount;
     } else if (type === "withdraw") {
-        if (customer.balance < amount) {
-            showPopup("Insufficient Balance!", "error");
+        if (customer.balance - amount < 500) {
+            alert("Minimum balance should be ₹500 after withdrawal!");
             return;
         }
-
-        let newBalance = parseFloat(customer.balance) - amount;
-
-        if (newBalance < 500) {
-            showPopup("Minimum balance should be ₹500!", "error");
-            return;
-        }
-
-        customer.balance = newBalance;
-        showPopup("Withdrawal successful!", "success");
+        customer.balance -= amount;
     } else if (type === "transfer") {
         let recipientIndex = document.getElementById("recipientSelect").value;
-
         if (recipientIndex === "" || recipientIndex == customerIndex) {
-            showPopup("Invalid Recipient!", "error");
+            alert("Invalid Recipient!");
             return;
         }
 
         let recipient = customers[recipientIndex];
 
-        if (customer.balance < amount) {
-            showPopup("Insufficient Balance!", "error");
+        if (!recipient || !recipient.accountNumber) {
+            alert("Recipient not found!");
             return;
         }
 
-        let newBalance = parseFloat(customer.balance) - amount;
-
-        if (newBalance < 500) {
-            showPopup("Minimum balance should be ₹500 after transfer!", "error");
+        if (customer.balance - amount < 500) {
+            alert("Minimum balance should be ₹500 after transfer!");
             return;
         }
 
-        customer.balance = newBalance;
-        recipient.balance = parseFloat(recipient.balance) + amount;
+        // Perform transfer
+        customer.balance -= amount;
+        recipient.balance += amount;
 
-        showPopup("Transfer successful!", "success");
+        // Save Transfer transaction (only once!)
+        let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+        transactions.push({
+            from: `${customer.accountNumber} - ${customer.name}`,
+            to: `${recipient.accountNumber} - ${recipient.name}`,
+            type: "Transfer",
+            amount,
+            date: new Date().toLocaleString()
+        });
+
+        localStorage.setItem("transactions", JSON.stringify(transactions));
+    } else {
+        // Save Deposit & Withdrawal transactions
+        let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+        transactions.push({
+            customer: `${customer.accountNumber} - ${customer.name}`,
+            type,
+            amount,
+            date: new Date().toLocaleString()
+        });
+
+        localStorage.setItem("transactions", JSON.stringify(transactions));
     }
 
     // Save Updated Customers
     localStorage.setItem("customers", JSON.stringify(customers));
 
-    // Save Transaction History
-    let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
-    transactions.push({
-        customer: customer.name,
-        type,
-        amount,
-        date: new Date().toLocaleString()
-    });
+    // Reset Inputs
+    document.getElementById("amount").value = "";
+    document.getElementById("customerSelect").selectedIndex = 0;
+    document.getElementById("recipientSelect").selectedIndex = 0;
+    document.getElementById("transactionType").selectedIndex = 0;
+    document.getElementById("transferSection").style.display = "none";
 
-    localStorage.setItem("transactions", JSON.stringify(transactions));
+    // Refresh
     loadTransactions();
-    loadCustomersForTransactions(); // Update dropdown balances
+    loadCustomersForTransactions();
 }
 
 // Load Transactions to Table
@@ -111,24 +127,12 @@ function loadTransactions() {
     transactions.forEach(transaction => {
         let row = `
             <tr>
-                <td>${transaction.customer}</td>
-                <td>${transaction.type}</td>
+                <td>${transaction.from ? transaction.from : transaction.customer}</td>
+                <td>${transaction.type}${transaction.to ? ` (To: ${transaction.to})` : ""}</td>
                 <td>₹${transaction.amount}</td>
                 <td>${transaction.date}</td>
             </tr>
         `;
         tableBody.innerHTML += row;
     });
-}
-
-// Function to Show Popup Alerts
-function showPopup(message, type) {
-    let popup = document.createElement("div");
-    popup.className = `popup ${type}`;
-    popup.innerText = message;
-    document.body.appendChild(popup);
-
-    setTimeout(() => {
-        popup.remove();
-    }, 3000);
 }
