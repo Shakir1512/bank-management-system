@@ -13,20 +13,16 @@ function loadCustomersForTransactions() {
     recipientSelect.innerHTML = "<option value=''>Select Recipient</option>";
 
     customers.forEach((customer, index) => {
-        let option = `<option value="${index}">${customer.name} - ${customer.balance}</option>`;
+        let option = `<option value="${index}">${customer.name} - ₹${customer.balance}</option>`;
         customerSelect.innerHTML += option;
         recipientSelect.innerHTML += option;
     });
 }
 
-// Show/Hide Transfer Section
+// Show/Hide Transfer Section based on selection
 document.getElementById("transactionType").addEventListener("change", function () {
     let transferSection = document.getElementById("transferSection");
-    if (this.value === "transfer") {
-        transferSection.style.display = "block";
-    } else {
-        transferSection.style.display = "none";
-    }
+    transferSection.style.display = this.value === "transfer" ? "block" : "none";
 });
 
 // Process Transactions
@@ -37,7 +33,7 @@ function processTransaction() {
     let customers = JSON.parse(localStorage.getItem("customers")) || [];
 
     if (customerIndex === "" || isNaN(amount) || amount <= 0) {
-        alert("Please enter valid details!");
+        showPopup("Please enter valid details!", "error");
         return;
     }
 
@@ -45,27 +41,48 @@ function processTransaction() {
 
     if (type === "deposit") {
         customer.balance = parseFloat(customer.balance) + amount;
+        showPopup("Deposit successful!", "success");
     } else if (type === "withdraw") {
         if (customer.balance < amount) {
-            alert("Insufficient Balance!");
+            showPopup("Insufficient Balance!", "error");
             return;
         }
-        customer.balance = parseFloat(customer.balance) - amount;
+
+        let newBalance = parseFloat(customer.balance) - amount;
+
+        if (newBalance < 500) {
+            showPopup("Minimum balance should be ₹500!", "error");
+            return;
+        }
+
+        customer.balance = newBalance;
+        showPopup("Withdrawal successful!", "success");
     } else if (type === "transfer") {
         let recipientIndex = document.getElementById("recipientSelect").value;
+
         if (recipientIndex === "" || recipientIndex == customerIndex) {
-            alert("Invalid Recipient!");
+            showPopup("Invalid Recipient!", "error");
             return;
         }
 
         let recipient = customers[recipientIndex];
+
         if (customer.balance < amount) {
-            alert("Insufficient Balance!");
+            showPopup("Insufficient Balance!", "error");
             return;
         }
 
-        customer.balance = parseFloat(customer.balance) - amount;
+        let newBalance = parseFloat(customer.balance) - amount;
+
+        if (newBalance < 500) {
+            showPopup("Minimum balance should be ₹500 after transfer!", "error");
+            return;
+        }
+
+        customer.balance = newBalance;
         recipient.balance = parseFloat(recipient.balance) + amount;
+
+        showPopup("Transfer successful!", "success");
     }
 
     // Save Updated Customers
@@ -96,10 +113,22 @@ function loadTransactions() {
             <tr>
                 <td>${transaction.customer}</td>
                 <td>${transaction.type}</td>
-                <td>$${transaction.amount}</td>
+                <td>₹${transaction.amount}</td>
                 <td>${transaction.date}</td>
             </tr>
         `;
         tableBody.innerHTML += row;
     });
+}
+
+// Function to Show Popup Alerts
+function showPopup(message, type) {
+    let popup = document.createElement("div");
+    popup.className = `popup ${type}`;
+    popup.innerText = message;
+    document.body.appendChild(popup);
+
+    setTimeout(() => {
+        popup.remove();
+    }, 3000);
 }
