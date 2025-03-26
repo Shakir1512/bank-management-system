@@ -34,6 +34,7 @@
         <table>
             <thead>
                 <tr>
+                    <th>SSN ID</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
@@ -51,10 +52,28 @@
             <span class="close" onclick="closeModal()">&times;</span>
             <h2 id="modalTitle">Add Customer</h2>
             <input type="hidden" id="customerId">
+            <input type="text" id="ssnId" placeholder="Customer SSN ID" required>
             <input type="text" id="customerName" placeholder="Full Name" required>
+            <input type="text" id="accountNumber" placeholder="Account Number" required>
+            <input type="text" id="ifscCode" placeholder="IFSC Code" required>
+            <input type="number" id="accountBalance" placeholder="Account Balance" required>
+            <input type="text" id="aadhaar" placeholder="Aadhaar Card No." required>
+            <input type="text" id="panCard" placeholder="PAN Card No." required>
+            <input type="date" id="dob" required>
+            <select id="gender" required>
+                <option value="" disabled selected>Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+            <select id="maritalStatus" required>
+                <option value="" disabled selected>Marital Status</option>
+                <option value="Single">Single</option>
+                <option value="Married">Married</option>
+            </select>
             <input type="email" id="customerEmail" placeholder="Email" required>
-            <input type="tel" id="customerPhone" placeholder="Phone Number" required>
-            <input type="number" id="customerBalance" placeholder="Balance" required>
+            <textarea id="address" placeholder="Address" maxlength="100" required></textarea>
+            <input type="text" id="customerPhone" placeholder="Contact Number" maxlength="10" required>
             <button onclick="saveCustomer()">Save</button>
         </div>
     </div>
