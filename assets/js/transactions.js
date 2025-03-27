@@ -47,15 +47,30 @@ function processTransaction() {
     }
 
     let customer = customers[customerIndex];
+    customer.balance = parseFloat(customer.balance); // Fix: Convert balance to number
+
+    let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
 
     if (type === "deposit") {
         customer.balance += amount;
+        transactions.push({
+            customer: `${customer.accountNumber} - ${customer.name}`,
+            type: "Deposit",
+            amount,
+            date: new Date().toLocaleString()
+        });
     } else if (type === "withdraw") {
         if (customer.balance - amount < 500) {
             alert("Minimum balance should be ₹500 after withdrawal!");
             return;
         }
         customer.balance -= amount;
+        transactions.push({
+            customer: `${customer.accountNumber} - ${customer.name}`,
+            type: "Withdrawal",
+            amount,
+            date: new Date().toLocaleString()
+        });
     } else if (type === "transfer") {
         let recipientIndex = document.getElementById("recipientSelect").value;
         if (recipientIndex === "" || recipientIndex == customerIndex) {
@@ -64,6 +79,7 @@ function processTransaction() {
         }
 
         let recipient = customers[recipientIndex];
+        recipient.balance = parseFloat(recipient.balance); // Fix: Convert balance to number
 
         if (!recipient || !recipient.accountNumber) {
             alert("Recipient not found!");
@@ -79,8 +95,7 @@ function processTransaction() {
         customer.balance -= amount;
         recipient.balance += amount;
 
-        // Save Transfer transaction (only once!)
-        let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+        // Save Transfer transaction (Fix: Avoid duplicates)
         transactions.push({
             from: `${customer.accountNumber} - ${customer.name}`,
             to: `${recipient.accountNumber} - ${recipient.name}`,
@@ -88,23 +103,13 @@ function processTransaction() {
             amount,
             date: new Date().toLocaleString()
         });
-
-        localStorage.setItem("transactions", JSON.stringify(transactions));
-    } else {
-        // Save Deposit & Withdrawal transactions
-        let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
-        transactions.push({
-            customer: `${customer.accountNumber} - ${customer.name}`,
-            type,
-            amount,
-            date: new Date().toLocaleString()
-        });
-
-        localStorage.setItem("transactions", JSON.stringify(transactions));
     }
 
-    // Save Updated Customers
+    // Save updated customers
     localStorage.setItem("customers", JSON.stringify(customers));
+
+    // Save updated transactions
+    localStorage.setItem("transactions", JSON.stringify(transactions));
 
     // Reset Inputs
     document.getElementById("amount").value = "";
@@ -113,7 +118,7 @@ function processTransaction() {
     document.getElementById("transactionType").selectedIndex = 0;
     document.getElementById("transferSection").style.display = "none";
 
-    // Refresh
+    // Refresh UI
     loadTransactions();
     loadCustomersForTransactions();
 }
