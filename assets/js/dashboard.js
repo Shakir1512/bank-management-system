@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     try {
         const user = JSON.parse(loggedInUser);
-        document.getElementById("userEmail").textContent = user.email;
+        document.getElementById("userEmail").textContent = user.firstName + " "+user.lastName;
     } catch (error) {
         console.error("Error parsing logged-in user data:", error);
         document.getElementById("userEmail").textContent = "Unknown User";
